@@ -1,0 +1,282 @@
+/**************/
+/*  Variables */
+/**************/
+$perspective: 800px;
+$u-size: 200px;
+$hu-size: $u-size / 2;
+
+
+$border-off: #863939; 
+$off: #af4c4c;
+$border-on: #659b6a; 
+$on: #88cf8f;
+
+/**************/
+/*  Utilites  */
+/**************/
+* {
+  box-sizing: border-box;
+  transform-style: preserve-3d;
+  margin: 0;
+}
+
+body{
+  background-color: $on;
+}
+
+.page {
+  color: #222;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+}
+
+/**************/
+/*Useless  Box*/
+/**************/
+.perspective {
+  perspective: $perspective;
+  perspective-origin: 50% 100px;
+}
+
+.box-faces, .box-tops {
+  position: relative;
+  width: $u-size;
+}
+.box-faces p {
+  padding: 40px 0;
+}
+.box-face {
+  outline: 1px solid #999;
+  position: absolute;
+  width: 200px;
+  height: 200px;
+}
+
+@mixin pos($t, $l, $w, $h) {
+  position: absolute;
+  top: $t;
+  left: $l;
+  width: $w;
+  height: $h;
+}
+$size: 200px;
+$split: 0.33;
+
+.box-face-top {
+  outline: 1px solid #999;
+  @include pos(0, 0, $size, $size * $split);
+}
+
+.box-face-bottom {
+  outline: 1px solid #999;
+  @include pos($size * $split, 0, $size, $size * (1.0 - $split));
+}
+
+.box-face--is-back {
+  transform: translateZ(-100px) rotateY(180deg);
+  background-color: #eee;
+}
+.box-face--is-right {
+  transform: rotateY(-270deg) translateX(100px);
+  transform-origin: top right;
+  background-color: #ddd;
+}
+.box-face--is-left {
+  transform: rotateY(270deg) translateX(-100px);
+  transform-origin: center left;
+  background-color: #ddd;
+}
+.box-face--is-top {
+  transform: rotateX(-90deg) translateY(-100px);
+  transform-origin: top center;
+  background-color: #fafafa;
+}
+.box-face--is-bottom {
+  transform: rotateX(90deg) translateY(100px);
+  transform-origin: bottom center;
+  background-color: #ddd;
+}
+.box-face--is-front {
+  transform: translateZ(100px);
+  background-color: #eee;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.margins {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+@keyframes spin {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
+}
+
+.box-faces {
+  transform: translateY(100px) rotateX(var(--rot-y)) rotateY(var(--rot-x));
+}
+
+@keyframes open {
+  from { transform: rotateX(0); }
+  to { transform: rotateX(90deg); }
+}
+
+.box-tops {
+  transform-origin: 50% #{$size * $split} #{-($size / 2)};
+}
+
+.shadow {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  top: 0px;
+  opacity: 0.98;
+  box-shadow: 0px 0px 100px #000;
+  transform: translateZ(-1px);
+  transform-origin: bottom center;
+}
+
+input {
+	opacity: 0;
+}
+
+.toggle {
+	position: relative;
+  width: 100%;
+  height: 100%;
+	display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+label.toggle-item {
+	width: 1.5em;
+	height: 4em;
+	display: inline-block;
+	background: #2e394d;
+	border-radius: 50px;
+
+  position: relative;
+	transition: all .3s ease;
+	transform-origin: 20% center;
+	cursor: pointer;
+}
+
+.normal {
+	label {
+		background: $off;
+    border: .5px solid $border-off;
+    box-shadow: inset 0px 0px 4px 0px rgba(0,0,0,0.2), 0 -3px 4px rgba(0,0,0,0.15);
+    
+    $nb-layer: 20;
+    @for $i from 1 through $nb-layer {
+      div:nth-child(#{$i}) {
+        display: block;
+        transition: all .2s ease;
+        position: absolute;
+        top: .125em;
+        left: -.05em;
+        width: 1.5em;
+        height: 1.75em;
+        border-radius: 2em;
+        border: 2px solid $border-on;
+        background: $on;
+        transition: all .3s ease;
+        
+        transform: translateZ(1px * $i) scale(($nb-layer - $i) / $nb-layer);
+      }
+    }
+	}
+}
+
+#normal:checked + label {
+	background: $on;
+  border: .5px solid $border-on;
+	div {
+		top: 2em;
+	}
+}
+
+/**************/
+/*   Closer   */
+/**************/
+
+/*cuboid*/
+.cube {
+  width: var(--width);
+  height: var(--height);
+  position: relative;
+}
+.cube-s {
+  background: $off;
+  position: absolute;
+  border: 1px $border-off solid;
+}
+.cube-s:nth-child(1), .cube-s:nth-child(2) {
+  --co: -0.5;
+  height: var(--height);
+  width: var(--width);
+  transform: translate3d(0 , 0, calc(var(--depth) * var(--co)));
+}
+.cube-s:nth-child(2) {
+  --co: 0.5;
+}
+.cube-s:nth-child(3), .cube-s:nth-child(4) {
+  --rt: 90deg;
+  height: var(--height);
+  width: var(--depth);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotateY(var(--rt)) translate3d(0,0, calc(var(--width) * -0.5));
+}
+.cube-s:nth-child(4) {
+  --rt: -90deg;
+}
+.cube-s:nth-child(5), .cube-s:nth-child(6) {
+  --rt: -90deg;
+  height: var(--depth);
+  width: var(--width);
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotateX(var(--rt)) translate3d( 0 , 0, calc(var(--height) * -0.5) );
+}
+.cube-s:nth-child(6) {
+  --rt: 90deg;
+}
+
+.base {
+  --width: 1rem;
+  --height: 12rem;
+  --depth: 1rem;
+  transform: translateX(100px - 8px) scaleY(0);
+  transform-origin: bottom center;
+}
+
+.arm {
+  --width: 1rem;
+  --height: 1rem;
+  --depth: 5rem;
+  transform: translateX(100px - 8px) translateY(-192px) translateZ(32px) scaleZ(0);
+  transform-origin: center center -30px;
+}
+
+.tilter {
+  --width: 1rem;
+  --height: 6rem;
+  --depth: 1rem;
+  transform: translateX(100px - 8px) translateY(-208px) translateZ(64px) scaleY(0);
+  transform-origin: top center;
+}
+
+.closer {
+  transform: translateZ(50px);
+}
