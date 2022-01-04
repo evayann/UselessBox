@@ -1,7 +1,6 @@
 # Useless Box
 
-A Useless Box made in pure CSS.
-https://evayann.github.io/UselessBox/
+A Useless Box made inpure CSS.
 
 ## Inspiration
 
