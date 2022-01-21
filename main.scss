@@ -76,6 +76,8 @@ body{
 .perspective {
   perspective: $perspective;
   perspective-origin: 50% 100px;
+  -webkit-perspective: $perspective;
+  -webkit-perspective-origin: 50% 100px;
 }
 
 .box-faces, .box-tops {
@@ -99,6 +101,17 @@ body{
   width: $w;
   height: $h;
 }
+
+@mixin trans($value) {
+  transform: $value;
+  -webkit-transform: $value;
+}
+
+@mixin trans-origin($value) {
+  transform-origin: $value;
+  -webkit-transform-origin: $value;
+}
+
 $size: 200px;
 $split: 0.33;
 
@@ -113,31 +126,31 @@ $split: 0.33;
 }
 
 .box-face--is-back {
-  transform: translateZ(-100px) rotateY(180deg);
+  @include trans(translateZ(-100px) rotateY(180deg));
   background-color: #eee;
 }
 .box-face--is-right {
-  transform: rotateY(-270deg) translateX(100px);
-  transform-origin: top right;
+  @include trans(rotateY(-270deg) translateX(100px));
+  @include trans-origin(top right);
   background-color: #ddd;
 }
 .box-face--is-left {
-  transform: rotateY(270deg) translateX(-100px);
-  transform-origin: center left;
+  @include trans(rotateY(270deg) translateX(-100px));
+  @include trans-origin(center left);
   background-color: #ddd;
 }
 .box-face--is-top {
-  transform: rotateX(-90deg) translateY(-100px);
-  transform-origin: top center;
+  @include trans(rotateX(-90deg) translateY(-100px));
+  @include trans-origin(top center);
   background-color: #fafafa;
 }
 .box-face--is-bottom {
-  transform: rotateX(90deg) translateY(100px);
-  transform-origin: bottom center;
+  @include trans(rotateX(90deg) translateY(100px));
+  @include trans-origin(bottom center);
   background-color: #ddd;
 }
 .box-face--is-front {
-  transform: translateZ(100px);
+  @include trans(translateZ(100px));
   background-color: #eee;
 }
 
@@ -155,21 +168,21 @@ $split: 0.33;
 }
 
 @keyframes spin {
-  from { transform: rotateY(0deg); }
-  to { transform: rotateY(360deg); }
+  from { @include trans(rotateY(0deg)); }
+  to { @include trans(rotateY(360deg)); }
 }
 
 .box-faces {
-  transform: translateY(100px) rotateX(var(--rot-y)) rotateY(var(--rot-x));
+  @include trans(translateY(100px) rotateX(var(--rot-y)) rotateY(var(--rot-x)));
 }
 
 @keyframes open {
-  from { transform: rotateX(0); }
-  to { transform: rotateX(90deg); }
+  from { @include trans(rotateX(0)); }
+  to { @include trans(rotateX(90deg)); }
 }
 
 .box-tops {
-  transform-origin: 50% #{$size * $split} #{-($size / 2)};
+  @include trans-origin(50% #{$size * $split} #{-($size / 2)});
 }
 
 .shadow {
@@ -179,8 +192,8 @@ $split: 0.33;
   top: 0px;
   opacity: 0.98;
   box-shadow: 0px 0px 100px #000;
-  transform: translateZ(-1px);
-  transform-origin: bottom center;
+  @include trans(translateZ(-1px));
+  @include trans-origin(bottom center);
 }
 
 input {
@@ -205,7 +218,7 @@ label.toggle-item {
 
   position: relative;
 	transition: all .3s ease;
-	transform-origin: 20% center;
+	@include trans-origin(20% center);
 	cursor: pointer;
 }
 
@@ -230,7 +243,7 @@ label.toggle-item {
         background: $on;
         transition: all .3s ease;
         
-        transform: translateZ(1px * $i) scale(($nb-layer - $i) / $nb-layer);
+        @include trans(translateZ(1px * $i) scale(($nb-layer - $i) / $nb-layer));
       }
     }
 	}
@@ -263,7 +276,7 @@ label.toggle-item {
   --co: -0.5;
   height: var(--height);
   width: var(--width);
-  transform: translate3d(0 , 0, calc(var(--depth) * var(--co)));
+  @include trans(translate3d(0 , 0, calc(var(--depth) * var(--co))));
 }
 .cube-s:nth-child(2) {
   --co: 0.5;
@@ -274,7 +287,7 @@ label.toggle-item {
   width: var(--depth);
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%) rotateY(var(--rt)) translate3d(0,0, calc(var(--width) * -0.5));
+  @include trans(translate(-50%, -50%) rotateY(var(--rt)) translate3d(0,0, calc(var(--width) * -0.5)));
 }
 .cube-s:nth-child(4) {
   --rt: -90deg;
@@ -285,7 +298,7 @@ label.toggle-item {
   width: var(--width);
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%) rotateX(var(--rt)) translate3d( 0 , 0, calc(var(--height) * -0.5) );
+  @include trans(translate(-50%, -50%) rotateX(var(--rt)) translate3d( 0 , 0, calc(var(--height) * -0.5)));
 }
 .cube-s:nth-child(6) {
   --rt: 90deg;
@@ -295,26 +308,26 @@ label.toggle-item {
   --width: 1rem;
   --height: 12rem;
   --depth: 1rem;
-  transform: translateX(100px - 8px) scaleY(0);
-  transform-origin: bottom center;
+  @include trans(translateX(100px - 8px) scaleY(0));
+  @include trans-origin(bottom center);
 }
 
 .arm {
   --width: 1rem;
   --height: 1rem;
   --depth: 5rem;
-  transform: translateX(100px - 8px) translateY(-192px) translateZ(32px) scaleZ(0);
-  transform-origin: center center -30px;
+  @include trans(translateX(100px - 8px) translateY(-192px) translateZ(32px) scaleZ(0));
+  @include trans-origin(center center -30px);
 }
 
 .tilter {
   --width: 1rem;
   --height: 6rem;
   --depth: 1rem;
-  transform: translateX(100px - 8px) translateY(-208px) translateZ(64px) scaleY(0);
-  transform-origin: top center;
+  @include trans(translateX(100px - 8px) translateY(-208px) translateZ(64px) scaleY(0));
+  @include trans-origin(top center);
 }
 
 .closer {
-  transform: translateZ(50px);
+  @include trans(translateZ(50px));
 }
